@@ -6,12 +6,9 @@ public interface HomeContract {
 
     interface HomeView {
 
-        void displayAccountData(Account account);
-    }
+        void displayAccount(Account account);
 
-    interface HomeModelCallbacks {
-
-        void accountFetched(Account account);
+        void gotoAccountDetailsFragment(String accountName);
     }
 
     interface HomePresenterCallbacks {

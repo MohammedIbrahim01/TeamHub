@@ -2,7 +2,8 @@ package com.abdelazim.x.teamhub.repository;
 
 import com.abdelazim.x.teamhub.account_details.AccountContract;
 import com.abdelazim.x.teamhub.home.HomeContract;
-import com.abdelazim.x.teamhub.home.model.HomeModel;
+
+import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -14,13 +15,12 @@ public class Repository {
 
     private Retrofit retrofit;
     private GithubApi githubApi;
-    private HomeContract.HomeModelCallbacks homeModelCallbacks;
+    HomeContract.HomePresenterCallbacks homePresenterCallbacks;
 
-    AccountContract.AccountModelCallBacks accountModelCallBacks;
 
-    public Repository(HomeContract.HomeModelCallbacks homeModelCallbacks) {
+    public Repository(HomeContract.HomePresenterCallbacks homePresenterCallbacks) {
 
-        this.homeModelCallbacks = homeModelCallbacks;
+        this.homePresenterCallbacks = homePresenterCallbacks;
 
         retrofit = new Retrofit.Builder()
                 .baseUrl("https://api.github.com/users/")
@@ -30,23 +30,26 @@ public class Repository {
         githubApi = retrofit.create(GithubApi.class);
     }
 
-    public void getDataFromGitHub() {
+    public void getAccountsFromGitHub(List<String> namesList) {
 
-        Call<Account> accountCall = githubApi.getAccount("mohammedibrahim01");
+        for (String name : namesList) {
 
-        accountCall.enqueue(new Callback<Account>() {
-            @Override
-            public void onResponse(Call<Account> call, Response<Account> response) {
+            Call<Account> accountCall = githubApi.getAccount(name);
 
-                Account account = response.body();
-                homeModelCallbacks.accountFetched(account);
-            }
+            accountCall.enqueue(new Callback<Account>() {
+                @Override
+                public void onResponse(Call<Account> call, Response<Account> response) {
 
-            @Override
-            public void onFailure(Call<Account> call, Throwable t) {
+                    Account account = response.body();
+                    homePresenterCallbacks.accountFetched(account);
+                }
 
-            }
-        });
+                @Override
+                public void onFailure(Call<Account> call, Throwable t) {
+
+                }
+            });
+        }
     }
 
     public void getAccountDetailsFromGithub(){
@@ -58,7 +61,6 @@ public class Repository {
             public void onResponse(Call<Account> call, Response<Account> response) {
 
                 Account account = response.body();
-                accountModelCallBacks.detailsFetched(account);
             }
 
             @Override
