@@ -5,28 +5,37 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.TextView;
+import android.widget.ListView;
 
 import com.abdelazim.x.teamhub.R;
 import com.abdelazim.x.teamhub.home.HomeContract;
 import com.abdelazim.x.teamhub.home.presenter.HomePresenter;
 import com.abdelazim.x.teamhub.repository.Account;
 
+import java.util.List;
+
+import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
+
 
 /**
  * A simple {@link Fragment} subclass.
  */
-public class HomeFragment extends Fragment implements View.OnClickListener , HomeContract.HomeView {
+public class HomeFragment extends Fragment implements View.OnClickListener , HomeContract.HomeView, AccountListAdapter.OnListItemClickListener {
 
+
+    public static final String KEY_ACCOUNT_NAME = "key-account-name";
 
     private HomePresenter presenter;
+    private RecyclerView accountListRecyclerView;
+    private AccountListAdapter accountListAdapter;
 
-    private TextView displayDataTextView;
-    private Button getDataButton;
+
 
 
     public HomeFragment() {
@@ -47,14 +56,34 @@ public class HomeFragment extends Fragment implements View.OnClickListener , Hom
         super.onViewCreated(view, savedInstanceState);
 
         initView(view);
+        presenter.getData();
     }
 
     private void initView(View view) {
 
-        displayDataTextView = view.findViewById(R.id.display_data_textView);
-        getDataButton = view.findViewById(R.id.get_Data_button);
+        accountListRecyclerView = view.findViewById(R.id.account_list_recyclerViews);
+        accountListAdapter = new AccountListAdapter(this);
 
-        getDataButton.setOnClickListener(this);
+        accountListRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        accountListRecyclerView.setHasFixedSize(true);
+        accountListRecyclerView.setAdapter(accountListAdapter);
+    }
+
+    @Override
+    public void displayAccount(Account account) {
+
+        accountListAdapter.addAccount(account);
+    }
+
+    @Override
+    public void gotoAccountDetailsFragment(String accountName) {
+
+        NavController navController = Navigation.findNavController(accountListRecyclerView);
+
+        Bundle args = new Bundle();
+        args.putString(KEY_ACCOUNT_NAME, accountName);
+
+        navController.navigate(R.id.toAccountDetailsFragment, args);
     }
 
     @Override
@@ -62,15 +91,13 @@ public class HomeFragment extends Fragment implements View.OnClickListener , Hom
 
         switch (v.getId()) {
 
-            case R.id.get_Data_button:
-                presenter.getDataButtonClicked();
+
         }
     }
 
     @Override
-    public void displayAccountData(Account account) {
+    public void onListItemClick(String accountName) {
 
-        displayDataTextView.setText("login: " + account.getLogin());
-        displayDataTextView.append("avatar_url: " + account.getAvatar_url());
+        presenter.accountListItemClicked(accountName);
     }
 }
