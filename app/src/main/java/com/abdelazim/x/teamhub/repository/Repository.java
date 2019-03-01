@@ -1,5 +1,6 @@
 package com.abdelazim.x.teamhub.repository;
 
+import com.abdelazim.x.teamhub.account_details.AccountContract;
 import com.abdelazim.x.teamhub.home.HomeContract;
 import com.abdelazim.x.teamhub.home.model.HomeModel;
 
@@ -14,6 +15,8 @@ public class Repository {
     private Retrofit retrofit;
     private GithubApi githubApi;
     private HomeContract.HomeModelCallbacks homeModelCallbacks;
+
+    AccountContract.AccountModelCallBacks accountModelCallBacks;
 
     public Repository(HomeContract.HomeModelCallbacks homeModelCallbacks) {
 
@@ -44,5 +47,25 @@ public class Repository {
 
             }
         });
+    }
+
+    public void getAccountDetailsFromGithub(){
+
+        Call<Account> accountCall=githubApi.getAccount("ahmedkhairyitpro");
+
+        accountCall.enqueue(new Callback<Account>() {
+            @Override
+            public void onResponse(Call<Account> call, Response<Account> response) {
+
+                Account account = response.body();
+                accountModelCallBacks.detailsFetched(account);
+            }
+
+            @Override
+            public void onFailure(Call<Account> call, Throwable t) {
+
+            }
+        });
+
     }
 }
