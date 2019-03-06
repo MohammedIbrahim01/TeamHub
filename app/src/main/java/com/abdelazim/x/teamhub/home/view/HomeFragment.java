@@ -1,6 +1,7 @@
 package com.abdelazim.x.teamhub.home.view;
 
 
+import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -10,7 +11,6 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ListView;
 
 import com.abdelazim.x.teamhub.R;
 import com.abdelazim.x.teamhub.home.HomeContract;
@@ -34,6 +34,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener , Hom
     private HomePresenter presenter;
     private RecyclerView accountListRecyclerView;
     private AccountListAdapter accountListAdapter;
+    private ProgressDialog progressDialog;
 
 
 
@@ -61,6 +62,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener , Hom
 
     private void initView(View view) {
 
+        progressDialog = new ProgressDialog(getContext());
         accountListRecyclerView = view.findViewById(R.id.account_list_recyclerViews);
         accountListAdapter = new AccountListAdapter(this);
 
@@ -84,6 +86,21 @@ public class HomeFragment extends Fragment implements View.OnClickListener , Hom
         args.putString(KEY_ACCOUNT_NAME, accountName);
 
         navController.navigate(R.id.toAccountDetailsFragment, args);
+    }
+
+    @Override
+    public void displayProgressDialog() {
+        progressDialog.show();
+    }
+
+    @Override
+    public void hideProgressBar() {
+        progressDialog.cancel();
+    }
+
+    @Override
+    public void displayAccounts(List<Account> accountList) {
+        accountListAdapter.setAccountList(accountList);
     }
 
     @Override
