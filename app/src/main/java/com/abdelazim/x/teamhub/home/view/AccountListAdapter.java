@@ -1,6 +1,10 @@
 package com.abdelazim.x.teamhub.home.view;
 
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
 import android.support.annotation.NonNull;
+import android.support.v4.graphics.drawable.RoundedBitmapDrawable;
+import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,6 +14,8 @@ import android.widget.TextView;
 
 import com.abdelazim.x.teamhub.R;
 import com.abdelazim.x.teamhub.repository.Account;
+import com.squareup.picasso.Callback;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,6 +29,7 @@ public class AccountListAdapter extends RecyclerView.Adapter<AccountListAdapter.
     public void setAccountList(List<Account> accountList) {
 
         this.accountList = accountList;
+        notifyDataSetChanged();
     }
 
     public void addAccount(Account account) {
@@ -55,7 +62,7 @@ public class AccountListAdapter extends RecyclerView.Adapter<AccountListAdapter.
 
         holder.setAvatar(currentAccount.getAvatar_url());
         holder.setAccountName(currentAccount.getLogin());
-        holder.setRepositoriesCount(currentAccount.getAvatar_url());
+        holder.setRepositoriesCount(currentAccount.getRepos());
     }
 
     @Override
@@ -85,6 +92,24 @@ public class AccountListAdapter extends RecyclerView.Adapter<AccountListAdapter.
         }
 
         public void setAvatar(String avatar_url) {
+            Picasso.get().load(avatar_url)
+                    .resize(140, 140)
+                    .into(avatarImageView, new Callback() {
+                @Override
+                public void onSuccess() {
+
+                    Bitmap imageBitmap = ((BitmapDrawable) avatarImageView.getDrawable()).getBitmap();
+                    RoundedBitmapDrawable imageDrawable = RoundedBitmapDrawableFactory.create(avatarImageView.getResources(), imageBitmap);
+                    imageDrawable.setCircular(true);
+                    imageDrawable.setCornerRadius(Math.max(imageBitmap.getWidth(), imageBitmap.getHeight()) / 2.0f);
+                    avatarImageView.setImageDrawable(imageDrawable);
+                }
+
+                @Override
+                public void onError(Exception e) {
+
+                }
+            });
         }
 
         public void setAccountName(String accountName) {
@@ -92,9 +117,9 @@ public class AccountListAdapter extends RecyclerView.Adapter<AccountListAdapter.
             accountNameTextView.setText(accountName);
         }
 
-        public void setRepositoriesCount(String avatar_url) {
+        public void setRepositoriesCount(String repos) {
 
-            repositoriesCountTextView.setText("Repositories count: " + avatar_url);
+            repositoriesCountTextView.setText("Repos : " + repos);
         }
     }
 }

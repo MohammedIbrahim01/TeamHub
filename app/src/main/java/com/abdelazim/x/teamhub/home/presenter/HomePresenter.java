@@ -11,6 +11,7 @@ public class HomePresenter implements HomeContract.HomePresenterCallbacks {
 
     private HomeModel model;
     private HomeContract.HomeView view;
+    private List<Account> accountList = new ArrayList<>();
 
     public HomePresenter(HomeContract.HomeView view) {
         this.view = view;
@@ -23,6 +24,7 @@ public class HomePresenter implements HomeContract.HomePresenterCallbacks {
         namesList.add("mohammedibrahim01");
         namesList.add("ahmedkhairyitpro");
         model.getAccountsFromRepository(namesList);
+        view.displayProgressDialog();
     }
 
     public void accountListItemClicked(String accountName) {
@@ -32,6 +34,14 @@ public class HomePresenter implements HomeContract.HomePresenterCallbacks {
 
     @Override
     public void accountFetched(Account account) {
-        view.displayAccount(account);
+
+        accountList.add(account);
+        if (accountList.size() == 2) {
+
+            view.displayAccounts(accountList);
+            view.hideProgressBar();
+        }
+        else
+            view.displayAccount(account);
     }
 }

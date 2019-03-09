@@ -1,9 +1,17 @@
 package com.abdelazim.x.teamhub.repository;
 
+import com.google.gson.annotations.SerializedName;
+
 public class Account {
 
     private String login;
     private String avatar_url;
+    @SerializedName("public_repos")
+    private String repos;
+
+    public String getRepos() {
+        return repos;
+    }
 
     private String type;
     private String company;
