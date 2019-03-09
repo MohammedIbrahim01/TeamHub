@@ -7,20 +7,21 @@ import com.abdelazim.x.teamhub.repository.Account;
 public class AccountPresenter implements AccountContract.AccountPresenterCallBacks {
 
     private AccountModel model;
+    AccountContract.AccountView accountView;
 
-    public AccountPresenter (){
-
+    public AccountPresenter (AccountContract.AccountView accountView){
+        this.accountView=accountView;
         model = new AccountModel(this);
     }
 
 
 
-    public void dataReceived() {
-        model.getAccountDetailsFromRepository();
+    public void getAccountDetailsFromModel(String name) {
+        model.getAccountDetailsFromRepository(name);
     }
 
     @Override
     public void detailsFetched(Account account) {
-
+        accountView.displayDetails(account);
     }
 }
