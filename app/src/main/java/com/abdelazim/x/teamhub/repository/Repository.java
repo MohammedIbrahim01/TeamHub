@@ -1,6 +1,11 @@
 package com.abdelazim.x.teamhub.repository;
 
+import android.content.Context;
+
 import com.abdelazim.x.teamhub.home.HomeContract;
+import com.abdelazim.x.teamhub.repository.local.LocalAccount;
+import com.abdelazim.x.teamhub.repository.local.LocalDatabase;
+import com.abdelazim.x.teamhub.repository.remote.GithubApi;
 
 import java.util.List;
 
@@ -15,9 +20,11 @@ public class Repository {
     private Retrofit retrofit;
     private GithubApi githubApi;
     HomeContract.HomePresenterCallbacks homePresenterCallbacks;
+    private LocalDatabase localDatabase;
 
-    public Repository(HomeContract.HomePresenterCallbacks homePresenterCallbacks) {
+    public Repository(HomeContract.HomePresenterCallbacks homePresenterCallbacks, Context context) {
 
+        localDatabase = LocalDatabase.getInstance(context);
         this.homePresenterCallbacks = homePresenterCallbacks;
 
         retrofit = new Retrofit.Builder()
@@ -40,6 +47,7 @@ public class Repository {
 
                     Account account = response.body();
                     homePresenterCallbacks.accountFetched(account);
+//                    saveAccountLocally(new LocalAccount(account.getLogin(),account.getAvatar_url(),account.getRepos()));
                 }
 
                 @Override
@@ -48,5 +56,10 @@ public class Repository {
                 }
             });
         }
+    }
+
+    public void saveAccountLocally(LocalAccount localAccount) {
+
+        localDatabase.localAccountDao().insertLocalAccount(localAccount);
     }
 }

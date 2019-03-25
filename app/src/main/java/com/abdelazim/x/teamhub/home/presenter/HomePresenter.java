@@ -1,5 +1,7 @@
 package com.abdelazim.x.teamhub.home.presenter;
 
+import android.content.Context;
+
 import com.abdelazim.x.teamhub.home.HomeContract;
 import com.abdelazim.x.teamhub.home.model.HomeModel;
 import com.abdelazim.x.teamhub.repository.Account;
@@ -13,9 +15,9 @@ public class HomePresenter implements HomeContract.HomePresenterCallbacks {
     private HomeContract.HomeView view;
     private List<Account> accountList = new ArrayList<>();
 
-    public HomePresenter(HomeContract.HomeView view) {
+    public HomePresenter(HomeContract.HomeView view, Context context) {
         this.view = view;
-        model = new HomeModel(this);
+        model = new HomeModel(this, context);
     }
 
     public void getData() {
@@ -40,8 +42,7 @@ public class HomePresenter implements HomeContract.HomePresenterCallbacks {
 
             view.displayAccounts(accountList);
             view.hideProgressBar();
-        }
-        else
+        } else if (accountList.size() > 2)
             view.displayAccount(account);
     }
 }

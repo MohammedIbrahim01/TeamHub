@@ -1,5 +1,7 @@
 package com.abdelazim.x.teamhub.home.model;
 
+import android.content.Context;
+
 import com.abdelazim.x.teamhub.home.HomeContract;
 import com.abdelazim.x.teamhub.repository.Account;
 import com.abdelazim.x.teamhub.repository.Repository;
@@ -11,8 +13,8 @@ public class HomeModel {
     private Repository repository;
     HomeContract.HomePresenterCallbacks presenterCallbacks;
 
-    public HomeModel(HomeContract.HomePresenterCallbacks presenterCallbacks) {
-        repository = new Repository(presenterCallbacks);
+    public HomeModel(HomeContract.HomePresenterCallbacks presenterCallbacks, Context context) {
+        repository = new Repository(presenterCallbacks, context);
         this.presenterCallbacks = presenterCallbacks;
     }
 

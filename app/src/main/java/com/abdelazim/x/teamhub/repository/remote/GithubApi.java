@@ -1,4 +1,6 @@
-package com.abdelazim.x.teamhub.repository;
+package com.abdelazim.x.teamhub.repository.remote;
+
+import com.abdelazim.x.teamhub.repository.Account;
 
 import retrofit2.Call;
 import retrofit2.http.GET;
