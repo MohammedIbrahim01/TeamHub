@@ -8,7 +8,6 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,8 +16,6 @@ import com.abdelazim.x.teamhub.R;
 import com.abdelazim.x.teamhub.home.HomeContract;
 import com.abdelazim.x.teamhub.home.presenter.HomePresenter;
 import com.abdelazim.x.teamhub.repository.Account;
-import com.abdelazim.x.teamhub.repository.local.LocalAccount;
-import com.abdelazim.x.teamhub.repository.local.LocalDatabase;
 
 import java.util.List;
 
@@ -29,7 +26,7 @@ import androidx.navigation.Navigation;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class HomeFragment extends Fragment implements View.OnClickListener , HomeContract.HomeView, AccountListAdapter.OnListItemClickListener {
+public class HomeFragment extends Fragment implements View.OnClickListener, HomeContract.HomeView, AccountListAdapter.OnListItemClickListener {
 
 
     public static final String KEY_ACCOUNT_NAME = "key-account-name";
@@ -38,8 +35,6 @@ public class HomeFragment extends Fragment implements View.OnClickListener , Hom
     private RecyclerView accountListRecyclerView;
     private AccountListAdapter accountListAdapter;
     private ProgressDialog progressDialog;
-
-
 
 
     public HomeFragment() {
@@ -61,11 +56,6 @@ public class HomeFragment extends Fragment implements View.OnClickListener , Hom
         presenter = new HomePresenter(this, getContext());
         initView(view);
         presenter.getData();
-
-//        List<LocalAccount> localAccounts = LocalDatabase.getInstance(getContext()).localAccountDao().getAllLocalAccounts();
-//        for (LocalAccount localAccount: localAccounts) {
-//            Log.i("GHH", "account " + localAccount.getId() + ": " + localAccount.getLogin());
-//        }
     }
 
     private void initView(View view) {

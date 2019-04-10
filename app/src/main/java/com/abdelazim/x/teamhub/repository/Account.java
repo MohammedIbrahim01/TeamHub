@@ -9,6 +9,12 @@ public class Account {
     @SerializedName("public_repos")
     private String repos;
 
+    public Account(String login, String avatar_url, String repos) {
+        this.login = login;
+        this.avatar_url = avatar_url;
+        this.repos = repos;
+    }
+
     public String getRepos() {
         return repos;
     }

@@ -24,4 +24,7 @@ public interface LocalAccountDao {
 
     @Query("SELECT * FROM `local-accounts` WHERE login = :accountName")
     LocalAccount getLocalAccountByAccountName(String accountName);
+
+    @Query("DELETE FROM `local-accounts`")
+    void deleteAll();
 }

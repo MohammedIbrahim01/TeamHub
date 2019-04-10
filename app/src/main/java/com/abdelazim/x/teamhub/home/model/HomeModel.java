@@ -22,4 +22,9 @@ public class HomeModel {
 
         repository.getAccountsFromGitHub(namesList);
     }
+
+    public void getAccountsFromLocalRepository() {
+
+        repository.getAccountsFromRoomDatabase();
+    }
 }

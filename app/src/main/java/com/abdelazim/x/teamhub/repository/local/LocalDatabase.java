@@ -5,7 +5,7 @@ import android.arch.persistence.room.Room;
 import android.arch.persistence.room.RoomDatabase;
 import android.content.Context;
 
-@Database(entities = {LocalAccount.class}, version = 1, exportSchema = false)
+@Database(entities = {LocalAccount.class}, version = 2, exportSchema = false)
 public abstract class LocalDatabase extends RoomDatabase {
 
     private static final String LOCAL_DATABASE = "local-database";
@@ -19,6 +19,7 @@ public abstract class LocalDatabase extends RoomDatabase {
 
                 sInstance = Room.databaseBuilder(context, LocalDatabase.class, LOCAL_DATABASE)
                         .allowMainThreadQueries()   // remove this line
+                        .fallbackToDestructiveMigration()
                         .build();
             }
 

@@ -66,7 +66,7 @@ public class Repository {
 
                     Account account = response.body();
                     homePresenterCallbacks.accountFetched(account);
-//                    saveAccountLocally(new LocalAccount(account.getLogin(),account.getAvatar_url(),account.getRepos()));
+                    saveAccountLocally(new LocalAccount(account.getLogin(),account.getAvatar_url(),account.getRepos()));
                 }
 
                 @Override
@@ -102,5 +102,17 @@ public class Repository {
             }
         });
 
+    }
+
+    public void getAccountsFromRoomDatabase() {
+
+        List<LocalAccount> localAccounts = localDatabase.localAccountDao().getAllLocalAccounts();
+        for (LocalAccount localAccount :
+                localAccounts) {
+            homePresenterCallbacks.accountFetched(new Account(
+                    localAccount.getLogin(),
+                    localAccount.getAvatar_url(),
+                    localAccount.getRepos()));
+        }
     }
 }
