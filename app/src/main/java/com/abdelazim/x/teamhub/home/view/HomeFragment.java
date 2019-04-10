@@ -8,6 +8,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,6 +17,8 @@ import com.abdelazim.x.teamhub.R;
 import com.abdelazim.x.teamhub.home.HomeContract;
 import com.abdelazim.x.teamhub.home.presenter.HomePresenter;
 import com.abdelazim.x.teamhub.repository.Account;
+import com.abdelazim.x.teamhub.repository.local.LocalAccount;
+import com.abdelazim.x.teamhub.repository.local.LocalDatabase;
 
 import java.util.List;
 
@@ -41,7 +44,6 @@ public class HomeFragment extends Fragment implements View.OnClickListener , Hom
 
     public HomeFragment() {
 
-        presenter = new HomePresenter(this);
     }
 
 
@@ -56,8 +58,14 @@ public class HomeFragment extends Fragment implements View.OnClickListener , Hom
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        presenter = new HomePresenter(this, getContext());
         initView(view);
         presenter.getData();
+
+//        List<LocalAccount> localAccounts = LocalDatabase.getInstance(getContext()).localAccountDao().getAllLocalAccounts();
+//        for (LocalAccount localAccount: localAccounts) {
+//            Log.i("GHH", "account " + localAccount.getId() + ": " + localAccount.getLogin());
+//        }
     }
 
     private void initView(View view) {
