@@ -22,4 +22,8 @@ public class HomeModel {
 
         repository.getAccountsFromGitHub(namesList);
     }
+
+    public void addedAccountFromRepository(String addName) {
+        repository.getAddedAccountFromGitHub(addName);
+    }
 }

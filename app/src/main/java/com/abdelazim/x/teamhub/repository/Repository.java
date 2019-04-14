@@ -1,6 +1,7 @@
 package com.abdelazim.x.teamhub.repository;
 
 import android.content.Context;
+import android.widget.Toast;
 
 import com.abdelazim.x.teamhub.home.HomeContract;
 import com.abdelazim.x.teamhub.repository.local.LocalAccount;
@@ -27,12 +28,10 @@ public class Repository {
     private LocalDatabase localDatabase;
     AccountContract.AccountPresenterCallBacks accountPresenterCallBacks;
 
-
     public Repository(HomeContract.HomePresenterCallbacks homePresenterCallbacks, Context context) {
 
         localDatabase = LocalDatabase.getInstance(context);
         this.homePresenterCallbacks = homePresenterCallbacks;
-
         retrofit = new Retrofit.Builder()
                 .baseUrl("https://api.github.com/users/")
                 .addConverterFactory(GsonConverterFactory.create())
@@ -103,4 +102,22 @@ public class Repository {
         });
 
     }
+
+    public void getAddedAccountFromGitHub(String addName) {
+            Call<Account> accountCall = githubApi.getAccount(addName);
+            accountCall.enqueue(new Callback<Account>() {
+                @Override
+                public void onResponse(Call<Account> call, Response<Account> response) {
+                    Account account = response.body();
+                    homePresenterCallbacks.accountFetched(account);
+                }
+
+                @Override
+                public void onFailure(Call<Account> call, Throwable t) {
+
+                }
+            });
+        }
+
+
 }

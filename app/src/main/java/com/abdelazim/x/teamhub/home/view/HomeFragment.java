@@ -12,6 +12,9 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.Toast;
 
 import com.abdelazim.x.teamhub.R;
 import com.abdelazim.x.teamhub.home.HomeContract;
@@ -38,8 +41,8 @@ public class HomeFragment extends Fragment implements View.OnClickListener , Hom
     private RecyclerView accountListRecyclerView;
     private AccountListAdapter accountListAdapter;
     private ProgressDialog progressDialog;
-
-
+    private Button addName;
+    private EditText addNameText;
 
 
     public HomeFragment() {
@@ -61,6 +64,18 @@ public class HomeFragment extends Fragment implements View.OnClickListener , Hom
         presenter = new HomePresenter(this, getContext());
         initView(view);
         presenter.getData();
+        addName.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(addNameText.getText().toString().isEmpty()){
+                    Toast.makeText(getActivity(), "Error", Toast.LENGTH_SHORT).show();
+                }else{
+                    presenter.addNameToList(addNameText.getText().toString());
+                    addNameText.setText("");
+                }
+
+            }
+        });
 
 //        List<LocalAccount> localAccounts = LocalDatabase.getInstance(getContext()).localAccountDao().getAllLocalAccounts();
 //        for (LocalAccount localAccount: localAccounts) {
@@ -73,10 +88,14 @@ public class HomeFragment extends Fragment implements View.OnClickListener , Hom
         progressDialog = new ProgressDialog(getContext());
         accountListRecyclerView = view.findViewById(R.id.account_list_recyclerViews);
         accountListAdapter = new AccountListAdapter(this);
+        addName = view.findViewById(R.id.add_name);
+        addNameText = view.findViewById(R.id.add_name_text);
+
 
         accountListRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         accountListRecyclerView.setHasFixedSize(true);
         accountListRecyclerView.setAdapter(accountListAdapter);
+
     }
 
     @Override

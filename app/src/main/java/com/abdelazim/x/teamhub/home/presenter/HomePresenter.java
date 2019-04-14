@@ -14,6 +14,7 @@ public class HomePresenter implements HomeContract.HomePresenterCallbacks {
     private HomeModel model;
     private HomeContract.HomeView view;
     private List<Account> accountList = new ArrayList<>();
+    private List<String> namesList = new ArrayList<>();
 
     public HomePresenter(HomeContract.HomeView view, Context context) {
         this.view = view;
@@ -22,7 +23,6 @@ public class HomePresenter implements HomeContract.HomePresenterCallbacks {
 
     public void getData() {
 
-        List<String> namesList = new ArrayList<>();
         namesList.add("mohammedibrahim01");
         namesList.add("ahmedkhairyitpro");
         model.getAccountsFromRepository(namesList);
@@ -38,11 +38,17 @@ public class HomePresenter implements HomeContract.HomePresenterCallbacks {
     public void accountFetched(Account account) {
 
         accountList.add(account);
-        if (accountList.size() == 2) {
+        if (accountList.size() == namesList.size()) {
 
             view.displayAccounts(accountList);
             view.hideProgressBar();
         } else if (accountList.size() > 2)
             view.displayAccount(account);
+    }
+
+    public void addNameToList(String addName) {
+            namesList.add(addName);
+            model.addedAccountFromRepository(addName);
+
     }
 }
