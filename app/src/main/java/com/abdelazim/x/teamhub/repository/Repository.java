@@ -1,6 +1,7 @@
 package com.abdelazim.x.teamhub.repository;
 
 import android.content.Context;
+import android.util.Log;
 
 import com.abdelazim.x.teamhub.home.HomeContract;
 import com.abdelazim.x.teamhub.repository.local.LocalAccount;
@@ -11,6 +12,7 @@ import com.abdelazim.x.teamhub.account_details.view.AccountDetailsFragment;
 import com.abdelazim.x.teamhub.home.HomeContract;
 import com.abdelazim.x.teamhub.home.view.HomeFragment;
 
+import java.io.IOException;
 import java.util.List;
 
 import retrofit2.Call;
@@ -57,6 +59,7 @@ public class Repository {
     public void getAccountsFromGitHub(List<String> namesList) {
 
         for (String name : namesList) {
+            Log.i("HHH", "names: " + name);
 
             Call<Account> accountCall = githubApi.getAccount(name);
 
@@ -64,14 +67,23 @@ public class Repository {
                 @Override
                 public void onResponse(Call<Account> call, Response<Account> response) {
 
+                    Log.i("HHH", String.valueOf(response.code()));
+                    try {
+                        Log.i("HHH", response.errorBody().string());
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                    if (!response.isSuccessful()) {
+                        return;
+                    }
                     Account account = response.body();
                     homePresenterCallbacks.accountFetched(account);
-                    saveAccountLocally(new LocalAccount(account.getLogin(),account.getAvatar_url(),account.getRepos()));
+                    saveAccountLocally(new LocalAccount(account.getLogin(), account.getAvatar_url(), account.getRepos()));
                 }
 
                 @Override
                 public void onFailure(Call<Account> call, Throwable t) {
-
+                    
                 }
             });
         }

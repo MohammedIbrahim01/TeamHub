@@ -14,8 +14,8 @@
             android:id="@+id/toAccountDetailsFragment"
             app:destination="@id/accountDetailsFragment" />
         <action
-            android:id="@+id/toPlaceHolderFragment"
-            app:destination="@id/placeHolderFragment" />
+            android:id="@+id/toSettingsFragment"
+            app:destination="@id/SettingsFragment" />
     </fragment>
     <fragment
         android:id="@+id/accountDetailsFragment"
@@ -23,8 +23,8 @@
         android:label="fragment_account_details"
         tools:layout="@layout/fragment_account_details" />
     <fragment
-        android:id="@+id/placeHolderFragment"
-        android:name="com.abdelazim.x.teamhub.placeholder.PlaceHolderFragment"
-        android:label="fragment_place_holder"
-        tools:layout="@layout/fragment_place_holder" />
+        android:id="@+id/SettingsFragment"
+        android:name="com.abdelazim.x.teamhub.settings.SettingsFragment"
+        android:label="fragment_settings"
+        tools:layout="@layout/fragment_settings" />
 </navigation>

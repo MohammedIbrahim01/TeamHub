@@ -9,18 +9,24 @@ import com.abdelazim.x.teamhub.home.model.HomeModel;
 import com.abdelazim.x.teamhub.repository.Account;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 public class HomePresenter implements HomeContract.HomePresenterCallbacks {
 
+
     private static final String TAG = "GGG";
     private static final String DEFAULT_SHARED_PREFERENCES = "default-sharedPreferences";
-    private static final String DATA_FETCHED_KEY = "data-fetched-key";
+    private static final String KEY_DATA_FETCHED = "data-fetched-key";
+    private static final String KEY_ACCOUNT_NAMES = "key-account-names";
+
     private SharedPreferences sharedPreferences;
     private SharedPreferences.Editor editor;
     private HomeModel model;
     private HomeContract.HomeView view;
     private List<Account> accountList = new ArrayList<>();
+    List<String> namesList = new ArrayList<>();
 
     public HomePresenter(HomeContract.HomeView view, Context context) {
         this.view = view;
@@ -31,16 +37,19 @@ public class HomePresenter implements HomeContract.HomePresenterCallbacks {
 
     public void getData() {
 
-        boolean isDataFetched = sharedPreferences.getBoolean(DATA_FETCHED_KEY, false);
+        boolean isDataFetched = sharedPreferences.getBoolean(KEY_DATA_FETCHED, false);
+
+        Set<String> namesSet = sharedPreferences.getStringSet(KEY_ACCOUNT_NAMES, new HashSet<String>());
+        namesList = new ArrayList<>(namesSet);
+
+        if (namesList.size() == 0)
+            return;
 
         if (!isDataFetched) {
 
-            List<String> namesList = new ArrayList<>();
-            namesList.add("mohammedibrahim01");
-            namesList.add("ahmedkhairyitpro");
             model.getAccountsFromRepository(namesList);
             view.displayProgressDialog();
-            editor.putBoolean(DATA_FETCHED_KEY, true);
+            editor.putBoolean(KEY_DATA_FETCHED, true);
             editor.apply();
             Log.i(TAG, "getData: from api");
         } else {

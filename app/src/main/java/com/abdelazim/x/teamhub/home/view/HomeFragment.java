@@ -26,8 +26,7 @@ import androidx.navigation.Navigation;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class HomeFragment extends Fragment implements View.OnClickListener, HomeContract.HomeView, AccountListAdapter.OnListItemClickListener {
-
+public class HomeFragment extends Fragment implements HomeContract.HomeView, AccountListAdapter.OnListItemClickListener {
 
     public static final String KEY_ACCOUNT_NAME = "key-account-name";
 
@@ -99,15 +98,6 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Home
     @Override
     public void displayAccounts(List<Account> accountList) {
         accountListAdapter.setAccountList(accountList);
-    }
-
-    @Override
-    public void onClick(View v) {
-
-        switch (v.getId()) {
-
-
-        }
     }
 
     @Override
